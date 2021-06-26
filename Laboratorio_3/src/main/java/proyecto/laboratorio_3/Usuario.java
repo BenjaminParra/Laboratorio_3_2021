@@ -23,7 +23,7 @@ public class Usuario {
         this.password = password;
         this.fechaDeCreacion = fechaDeCreacion;
     }
-    static Utils util = new Utils();
+    //static Utils util = new Utils();
     static Validator validator = new Validator();
     
 

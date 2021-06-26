@@ -18,7 +18,7 @@ public class Main {
      */
     static Scanner sc = new Scanner(System.in);
     
-    static Utils util = new Utils();
+    //static Utils util = new Utils();
     static Validator validator = new Validator();
     static ValidationResponse validationResponse = new ValidationResponse();
     public static void main(String[] args) {
@@ -59,7 +59,7 @@ public class Main {
                         validationResponse = validator.validadorFecha(datos);
                         if (validationResponse.isEsValido()) {
                             Fecha fecha = new Fecha(Integer.valueOf(datos[0]),Integer.valueOf(datos[1]),Integer.valueOf(datos[2]));
-                            //System.out.println(fecha);
+                            System.out.println(fecha);
                             
                         }else{
                             System.out.println(validationResponse.getMensaje());
