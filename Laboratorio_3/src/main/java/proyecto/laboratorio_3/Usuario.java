@@ -16,7 +16,8 @@ public class Usuario {
     String password;
     Fecha fechaDeCreacion; //Definir clase Fecha
     ArrayList<Usuario> amigos = new ArrayList();
-    //ArrayList<Post> posts = new ArrayList(); Definir clase post
+    boolean estado = false; // false == offline
+    ArrayList<Post> posts = new ArrayList();
 
     public Usuario(String nombreUsuario, String password, Fecha fechaDeCreacion) {
         this.nombreUsuario = nombreUsuario;
@@ -66,6 +67,17 @@ public class Usuario {
         this.amigos = amigos;
     }
 
+    public boolean isEstado() {
+        return estado;
+    }
+
+   
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    
+
     public boolean validaUsuario() {
         return !nombreUsuario.equals(password) && nombreUsuario.length() >= 6; //&& validaPassword() && fechaDeCreacion.esValida();
     }
@@ -97,10 +109,24 @@ public class Usuario {
     public boolean validaPassword() {
         return password.length() >= 6 && !password.contains(" ") && contieneNumeros();
     }
+    
+    public boolean esAmigo(Usuario usuario2){
+        return amigos.contains(usuario2);
+    }
+    
+    public void agregaAmigo(Usuario usuario2){
+        amigos.add(usuario2);
+    }
 
     @Override
     public String toString() {
-        return "Usuario{" + "nombreUsuario=" + nombreUsuario + ", password=" + password + ", fechaDeCreacion=" + fechaDeCreacion + '}';
+        return "Usuario{" + "nombreUsuario=" + nombreUsuario + ", password=" + password + ", fechaDeCreacion=" + fechaDeCreacion + ", amigos=" + amigos + ", estado=" + estado + ", posts=" + posts + '}';
     }
+
+    
+    
+    
+
+   
     
 }

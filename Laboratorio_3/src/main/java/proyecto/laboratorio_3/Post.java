@@ -17,7 +17,7 @@ public class Post {
     Fecha fechaDePublicacion;
     String contenido;
     ArrayList<Usuario> receptor = new ArrayList();
-
+// Fecha, Contenido, [NombreUsuario,NombreUsuario2 ]
     public Post(Usuario user, Fecha fechaDePublicacion, String contenido) {
         this.ID = 0;
         this.user = user;
@@ -82,5 +82,16 @@ public class Post {
     public void setReceptor(ArrayList<Usuario> receptor) {
         this.receptor = receptor;
     }
+    
+    public boolean validaTipo(){
+        return (contenido.contains(".text"))|| (contenido.contains(".video"))||(contenido.contains(".audio"))||(contenido.contains(".url"))||(contenido.contains(".video"));
+    }
+    
+    public boolean ValidaContenido(){
+        return !contenido.isEmpty() && validaTipo(); /*&& !contenido.split("\\.")[1].contains(" ");*/
+    }
+    
+    
+    
     
 }

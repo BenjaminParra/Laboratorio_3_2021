@@ -111,6 +111,40 @@ public class Validator {
         return validationResponse;
     }
     
+    public ValidationResponse validadorPost(String[] post){
+        ValidationResponse validationResponse = new ValidationResponse();
+        boolean esValido = true;
+	String mensajeValidacion = "";
+        if (!esPost(post)){
+            esValido = false;
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA";
+        }else if (esPost(post)) {
+            
+            
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+    }
+    
+    public ValidationResponse validadorLogin(String[] usuario,SocialNetwork socialNetwork){
+        ValidationResponse validationResponse = new ValidationResponse();
+        String mensajeValidacion = "";
+        boolean esValido = true;
+        if (!esLogin(usuario)) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña";
+        }else{
+            if (!socialNetwork.validaLogin(usuario[0], usuario[1])) {
+                esValido = false;
+                mensajeValidacion = mensajeValidacion +socialNetwork.errorLogin(usuario[0], usuario[1]);
+            }
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+    }
+    
     
     public boolean esFecha(String[] strSplit) {
         //String[] strSplit = str.split("/");
@@ -132,6 +166,16 @@ public class Validator {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+    
+    
+    
+    public boolean esPost(String[] strSplit){
+        return strSplit.length == 5 && esNumero(strSplit[0]) && !strSplit[1].isEmpty() && !strSplit[2].isEmpty() && !esNumero(strSplit[3]) && !esNumero(strSplit[4]);
+    }
+    
+    public boolean esLogin(String[] strSplit){
+        return strSplit.length == 2 && !esNumero(strSplit[0]) && !esNumero(strSplit[1]);
     }
     
     
