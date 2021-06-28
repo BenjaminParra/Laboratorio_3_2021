@@ -18,22 +18,22 @@ public class Validator {
         
         if (!esFecha(fecha)) {
             esValido = false;
-            mensajeValidacion = mensajeValidacion + "\nAsegurese de ingresar numeros en el campo de la fecha";
+            mensajeValidacion = mensajeValidacion + "\nAsegurese de ingresar numeros en el campo de la fecha\n";
         }else{
             Fecha fecha1 = new Fecha(Integer.valueOf(fecha[0]),Integer.valueOf(fecha[1]),Integer.valueOf(fecha[2]));
             if (!fecha1.esValida()) {
                 if (fecha1.getDia()>31 || fecha1.getDia()<1) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "\n ERROR: El día puede tomar un valor entre 0 y 32 ";
+                    mensajeValidacion = mensajeValidacion + "\n ERROR: El día puede tomar un valor entre 0 y 32 \n";
                 }else if (fecha1.getMes()>12 || fecha1.getMes()<1) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "\n ERROR: El mes puede tomar un valor entre 0 y 13 ";
+                    mensajeValidacion = mensajeValidacion + "\n ERROR: El mes puede tomar un valor entre 0 y 13 \n";
                 }else if (fecha1.getAnnio()<1) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "\n ERROR: El año debe ser un valor mayor a 0";
+                    mensajeValidacion = mensajeValidacion + "\n ERROR: El año debe ser un valor mayor a 0\n";
                 }else if (fecha1.getDiasDelMes()<fecha1.getDia()) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "\n ERROR: De acuerdo al mes "+fecha1.getMesPalabra()+" solo se pueden tener "+fecha1.getDiasDelMes()+" dias";
+                    mensajeValidacion = mensajeValidacion + "\n ERROR: De acuerdo al mes "+fecha1.getMesPalabra()+" solo se pueden tener "+fecha1.getDiasDelMes()+" dias\n";
                 }
                 
             }else{
@@ -48,14 +48,18 @@ public class Validator {
     }
     
     
-    public ValidationResponse validadorUsuario(String[] usuario){
+    public ValidationResponse validadorUsuario(String[] usuario,SocialNetwork socialNetwork){
         ValidationResponse validationResponse = new ValidationResponse();
         boolean esValido = true;
 	String mensajeValidacion = "";
         if (!esUsuario(usuario)) {
             esValido = false;
-            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA";
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA\n";
             
+        }
+        if (socialNetwork.estaRegistrado(usuario[0])) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion +"\nERROR: El usuario"+ usuario[0]+"se encuentra registrado\n";
         }
         if (esUsuario(usuario) && !validadorFecha(usuario[2].split("/")).isEsValido()) {
             esValido = false;
@@ -68,41 +72,41 @@ public class Validator {
             if (!usuario1.validaUsuario()&&usuario1.validaPassword()) {
                 if (usuario1.getNombreUsuario().equals(usuario1.getPassword())) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña es valida, pero:\n"+ "La contraseña y NombreUsuario no pueden ser iguales";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña es valida, pero:\n"+ "La contraseña y NombreUsuario no pueden ser iguales\n";
                 }else if (usuario1.getNombreUsuario().length()<6) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña es valida, pero:\n"+ "El Nombre de usuario debe contener al menos 6 caracteres";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña es valida, pero:\n"+ "El Nombre de usuario debe contener al menos 6 caracteres\n";
                 }
             }else if (usuario1.validaUsuario() && !usuario1.validaPassword()) {
                 if (usuario1.getPassword().equals(usuario1.getNombreUsuario())) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: El usuario es valido, pero:\n"+ "La contraseña y NombreUsuario no pueden ser iguales";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El usuario es valido, pero:\n"+ "La contraseña y NombreUsuario no pueden ser iguales\n";
                 }else if (usuario1.getPassword().length() < 6) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: El usuario es valido, pero:\n"+ "La contraseña debe contener al menos 6 caracteres";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El usuario es valido, pero:\n"+ "La contraseña debe contener al menos 6 caracteres\n";
                 }else if (usuario1.getPassword().contains(" ")) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: El usuario es valido, pero:\n"+ "La contraseña no debe contener espacios";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El usuario es valido, pero:\n"+ "La contraseña no debe contener espacios\n";
                 }else if (!usuario1.contieneNumeros()) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: El usuario es valido, pero:\n"+ "La contraseña debe contener al menos 3 numeros";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El usuario es valido, pero:\n"+ "La contraseña debe contener al menos 3 numeros\n";
                 }
             }else if (!usuario1.validaUsuario() && !usuario1.validaPassword()) {
                 if (usuario1.getNombreUsuario().equals(usuario1.getPassword())) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña y NombreUsuario no pueden ser iguales\n";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña y NombreUsuario no pueden ser iguales\n";
                 }else if (usuario1.getNombreUsuario().length()<6) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: El Nombre de usuario debe contener al menos 6 caracteres\n";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El Nombre de usuario debe contener al menos 6 caracteres\n";
                 }else if (usuario1.getPassword().length() < 6) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña debe contener al menos 6 caracteres\n";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña debe contener al menos 6 caracteres\n";
                 }else if (usuario1.getPassword().contains(" ")) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña no debe contener espacios\n";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña no debe contener espacios\n";
                 }else if (usuario1.contieneNumeros()) {
                     esValido = false;
-                    mensajeValidacion = mensajeValidacion + "ERROR: La contraseña debe contener al menos 2 numeros\n";
+                    mensajeValidacion = mensajeValidacion + "\nERROR: La contraseña debe contener al menos 2 numeros\n";
                 }
             }
         }
@@ -117,7 +121,7 @@ public class Validator {
 	String mensajeValidacion = "";
         if (!esPost(post)){
             esValido = false;
-            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA";
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA\n";
         }else if (esPost(post)) {
             
             
@@ -133,7 +137,7 @@ public class Validator {
         boolean esValido = true;
         if (!esLogin(usuario)) {
             esValido = false;
-            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña";
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña\n";
         }else{
             if (!socialNetwork.validaLogin(usuario[0], usuario[1])) {
                 esValido = false;
@@ -179,7 +183,20 @@ public class Validator {
     }
     
     
-    
+    public ValidationResponse validadorOpciones(String opcion){
+        ValidationResponse validationResponse = new ValidationResponse();
+        String mensajeValidacion = "";
+        boolean esValido = true;
+        if (!esNumero(opcion)) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion + "\nPor favor solo ingrese números\n";
+            
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+        
+    }
     
     
     
