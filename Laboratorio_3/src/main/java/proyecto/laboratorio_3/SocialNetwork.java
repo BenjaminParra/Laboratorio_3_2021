@@ -22,9 +22,26 @@ public class SocialNetwork {
         this.fecha = fecha;
     }
 
+    public String getNombreSocialNetwork() {
+        return nombreSocialNetwork;
+    }
+
+    public ArrayList<Post> getPublicaciones() {
+        return publicaciones;
+    }
+    
+    public String traducePosts(){
+        String aux = "";
+        for (int i = 0; i < publicaciones.size(); i++) {
+            aux = aux + publicaciones.get(i).toString();
+        }
+        return aux;
+    }
+    
+
     @Override
     public String toString() {
-        return "SocialNetwork{" + "nombreSocialNetwork=" + nombreSocialNetwork + ", fecha=" + fecha + ", usuarios=" + usuarios + ", publicaciones=" + publicaciones + '}';
+        return "SocialNetwork{" + "nombreSocialNetwork=" + nombreSocialNetwork + ", fecha=" + fecha + ", usuarios=" + usuarios + ", publicaciones=" + /*traducePosts()*/publicaciones + '}';
     }
     
     public boolean estaRegistrado(Usuario user){
@@ -32,7 +49,12 @@ public class SocialNetwork {
     }
     public boolean estaRegistrado(String nombreUsuario){
         for (int i = 0; i < usuarios.size(); i++) {
-            return usuarios.get(i).getNombreUsuario().equals(nombreUsuario);
+            if (usuarios.get(i).getNombreUsuario().equals(nombreUsuario)) {
+                return true;
+                
+            }
+            //BenjaminParra,benja123,27/12/2021
+
             
         }
         return false;
@@ -90,11 +112,33 @@ public class SocialNetwork {
     
     //CONSULTAR BOTORO sobre el null
     public Usuario getUserOnline(){
-        for (int i = 0; i < usuarios.size(); i++) {
+        if (existeUserOnline()) {
+            for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).isEstado()) {
                 return usuarios.get(i);
             }
-        }return null;
+            }
+        }
+        
+        return usuarios.get(0);
+    }
+    
+    public boolean existeUserOnline(){
+        for (int i = 0; i < usuarios.size(); i++) {
+            if (usuarios.get(i).isEstado()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //metodo que entrega el id a una nueva publicacion
+    public Integer getIDNewPost(){
+        return publicaciones.size()+1;
+    }
+    //metodo que cambia el estado online por un offline, este se aplica luego de cada operacion
+    public void turnOffUser(){
+        getUserOnline().setEstado(false);
     }
     
     

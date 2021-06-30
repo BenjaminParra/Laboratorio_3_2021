@@ -33,6 +33,11 @@ public class Usuario {
         
         return true;
     }*/
+    
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
@@ -81,6 +86,15 @@ public class Usuario {
     public boolean validaUsuario() {
         return !nombreUsuario.equals(password) && nombreUsuario.length() >= 6; //&& validaPassword() && fechaDeCreacion.esValida();
     }
+    
+    public String traducePosts(){
+        String aux = "";
+        for (int i = 0; i < posts.size(); i++) {
+            aux = aux + posts.get(i).toString();
+        }
+        
+        return aux;
+    }
 
     //metodo que verifica que la contraseña no tenga espacio
     /*
@@ -114,13 +128,60 @@ public class Usuario {
         return amigos.contains(usuario2);
     }
     
+    public boolean esAmigo(String usuario2){
+        for (int i = 0; i < amigos.size(); i++) {
+            if (amigos.get(i).getNombreUsuario().equals(usuario2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //metodo que entrega el id a una nueva publicacion
+    public Integer getIDNewPost(){
+        return posts.size()+1;
+    }
+    
     public void agregaAmigo(Usuario usuario2){
         amigos.add(usuario2);
+    }
+    
+    public void agregaPost(Post post){
+        posts.add(post);
     }
 
     @Override
     public String toString() {
-        return "Usuario{" + "nombreUsuario=" + nombreUsuario + ", password=" + password + ", fechaDeCreacion=" + fechaDeCreacion + ", amigos=" + amigos + ", estado=" + estado + ", posts=" + posts + '}';
+        return "Usuario{" + "nombreUsuario=" + nombreUsuario + ", password=" + password + ", fechaDeCreacion=" + fechaDeCreacion + ", amigos=" + amigos + ", estado=" + estado + ", posts=" +posts/*+ ", posts=" + traducePosts()*/ + '}';
+    }
+    
+    
+    public String getUnfriends(String[] usuarios){
+        String aux = "Los siguientes usuarios no encuentran en la lista de usuarios ";    
+        for (int i = 0; i < usuarios.length; i++) {
+            if (!esAmigo(usuarios[i])) {
+                aux = aux + usuarios[i]+" ,";
+                
+            }
+            
+        }
+        
+        return aux;
+    }
+    
+     public ArrayList<String> dejaAmigos(String[] usuarios){
+          ArrayList<String> amigosReturn = new ArrayList();
+          for (int i = 0; i < usuarios.length; i++) {
+              if (esAmigo(usuarios[i])) {
+                  amigosReturn.add(usuarios[i]);
+                
+                
+                
+            }
+            
+        }
+        
+        return amigosReturn;
     }
 
     

@@ -18,21 +18,6 @@ public class Post {
     String contenido;
     ArrayList<Usuario> receptor = new ArrayList();
 // Fecha, Contenido, [NombreUsuario,NombreUsuario2 ]
-    public Post(Usuario user, Fecha fechaDePublicacion, String contenido) {
-        this.ID = 0;
-        this.user = user;
-        this.fechaDePublicacion = fechaDePublicacion;
-        this.contenido = contenido;
-    }
-    
-    public Post(Usuario user, Fecha fechaDePublicacion, String contenido,Usuario Receptor){
-        this.ID = 0;
-        this.user = user;
-        this.fechaDePublicacion = fechaDePublicacion;
-        this.contenido = contenido;
-        receptor.add(Receptor);
-        
-    }
     
     public Post(Usuario user, Fecha fechaDePublicacion, String contenido,Integer ID){
         this.ID = ID;
@@ -90,6 +75,18 @@ public class Post {
     public boolean ValidaContenido(){
         return !contenido.isEmpty() && validaTipo(); /*&& !contenido.split("\\.")[1].contains(" ");*/
     }
+
+    @Override
+    public String toString() {
+        if (receptor.isEmpty()) {
+            return "El usuario "+user.nombreUsuario +" ha realizado la publicación >>"+contenido+"<< con el ID-"+ID +"el día "+fechaDePublicacion;
+        }else{
+            return "Post{" + "ID=" + ID + ", user=" + user.nombreUsuario + ", fechaDePublicacion=" + fechaDePublicacion + ", contenido=" + contenido + ", receptor=" + receptor + '}';
+        }
+        
+    }
+    
+    
     
     
     

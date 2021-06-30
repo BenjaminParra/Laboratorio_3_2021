@@ -115,21 +115,49 @@ public class Validator {
         return validationResponse;
     }
     
-    public ValidationResponse validadorPost(String[] post){
+    public ValidationResponse validadorPostSolo(String[] post,SocialNetwork socialNetwork,Fecha fechita){
+        ValidationResponse validationResponse = new ValidationResponse();
+        boolean esValido = true;
+	String mensajeValidacion = "";
+        if (!esPostSolo(post)) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion + "\nERROR: Asegurese de ingresar los datos de la publicacion con el siguiente formato >>Post.TipoDeArchivo<<";
+            }else{
+            Post postSolo = new Post(socialNetwork.getUserOnline(), fechita, post[0]+"."+post[1],socialNetwork.getIDNewPost());
+            if (!postSolo.ValidaContenido()) {
+                if (!postSolo.validaTipo()) {
+                    esValido = false;
+                    mensajeValidacion = mensajeValidacion + "\nERROR: Recuerde que los tipo de la publicación son: \".text\", \".video\", \".audio\", \".url\" o \".video\"";
+                }
+            }
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+    }
+    
+    
+    /*
+    public ValidationResponse validadorPost(String[] post2,SocialNetwork socialNetwork,Fecha fechita){
         ValidationResponse validationResponse = new ValidationResponse();
         boolean esValido = true;
 	String mensajeValidacion = "";
         if (!esPost(post)){
             esValido = false;
-            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato NombreUsuario,Contraseña,DD/MM/AAAA\n";
-        }else if (esPost(post)) {
+            mensajeValidacion = mensajeValidacion +"\nERROR: Asegurese de ingresar los datos con el formato texto.tipo/user1,user2,...";
+        }else{
+            Post postAmigos = new Post(socialNetwork.getUserOnline(),fechita, post2[0]);
+            if (esValido) {
+                
+            }
+            
             
             
         }
         validationResponse.setEsValido(esValido);
         validationResponse.setMensaje(mensajeValidacion);
         return validationResponse;
-    }
+    }*/
     
     public ValidationResponse validadorLogin(String[] usuario,SocialNetwork socialNetwork){
         ValidationResponse validationResponse = new ValidationResponse();
@@ -147,6 +175,54 @@ public class Validator {
         validationResponse.setEsValido(esValido);
         validationResponse.setMensaje(mensajeValidacion);
         return validationResponse;
+    }
+    
+    public ValidationResponse validadorSeguir(String usuario, SocialNetwork socialNetwork){
+        ValidationResponse validationResponse = new ValidationResponse();
+        String mensajeValidacion = "";
+        boolean esValido = true;
+        if (esNumero(usuario)||usuario.isEmpty()) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion + "\nERROR: Asegurese de ingresar el nombre de un usuario";
+        }else{
+            if (usuario.length()<6) {
+                esValido = false;
+                mensajeValidacion = mensajeValidacion + "\nERROR: Recuerde que todo usuario debe contener al menos 6 caracteres";
+            }
+            if (!socialNetwork.estaRegistrado(usuario)) {
+                esValido = false;
+                mensajeValidacion = mensajeValidacion + "\nERROR: El usuario no se encuentra registrado";
+            }
+            if (socialNetwork.estaRegistrado(usuario)) {
+                if (socialNetwork.getUserOnline().getAmigos().contains(socialNetwork.getUsuarioConNombre(usuario))) {
+                    esValido = false;
+                    mensajeValidacion = mensajeValidacion + "\nERROR: El usuario:"+usuario+" ya se encuentra en la lista de amigos de"+socialNetwork.getUserOnline().getNombreUsuario();
+                }
+                if (socialNetwork.getUserOnline().getNombreUsuario().equals(usuario)) {
+                    esValido = false;
+                    mensajeValidacion = mensajeValidacion + "\nERROR: No puede seguirse así mismo";
+                }
+                
+            }
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+    }
+    
+    public ValidationResponse validadorOpciones(String opcion){
+        ValidationResponse validationResponse = new ValidationResponse();
+        String mensajeValidacion = "";
+        boolean esValido = true;
+        if (!esNumero(opcion)) {
+            esValido = false;
+            mensajeValidacion = mensajeValidacion + "\nPor favor solo ingrese números\n";
+            
+        }
+        validationResponse.setEsValido(esValido);
+        validationResponse.setMensaje(mensajeValidacion);
+        return validationResponse;
+        
     }
     
     
@@ -172,10 +248,12 @@ public class Validator {
         }
     }
     
-    
+    public boolean esPostSolo(String[] postSplit){
+        return postSplit.length == 2 && !postSplit[0].isEmpty() && !postSplit[1].isEmpty();
+    }
     
     public boolean esPost(String[] strSplit){
-        return strSplit.length == 5 && esNumero(strSplit[0]) && !strSplit[1].isEmpty() && !strSplit[2].isEmpty() && !esNumero(strSplit[3]) && !esNumero(strSplit[4]);
+        return strSplit.length == 2 && !strSplit[0].isEmpty() && !strSplit[1].isEmpty() && !esNumero(strSplit[0]) && !esNumero(strSplit[1]);
     }
     
     public boolean esLogin(String[] strSplit){
@@ -183,20 +261,7 @@ public class Validator {
     }
     
     
-    public ValidationResponse validadorOpciones(String opcion){
-        ValidationResponse validationResponse = new ValidationResponse();
-        String mensajeValidacion = "";
-        boolean esValido = true;
-        if (!esNumero(opcion)) {
-            esValido = false;
-            mensajeValidacion = mensajeValidacion + "\nPor favor solo ingrese números\n";
-            
-        }
-        validationResponse.setEsValido(esValido);
-        validationResponse.setMensaje(mensajeValidacion);
-        return validationResponse;
-        
-    }
+    
     
     
     
